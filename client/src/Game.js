@@ -39,6 +39,7 @@ function Game() {
         return () => {
             window.removeEventListener('resize',handleResize);
         }
+        // eslint-disable-next-line
     }, []);
 
     const scene = new THREE.Scene();
