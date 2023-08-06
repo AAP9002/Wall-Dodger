@@ -1,16 +1,24 @@
 import './game.css';
 import * as THREE from 'three';
-import { useEffect,useState} from 'react';
+import { useEffect} from 'react';
 
 function Game() {
     // counter for score
-    const [score, setScore] = useState(0);
+    var gameScore = 0;
 
 
     // create renderer
     const renderer = new THREE.WebGLRenderer();
 
+    // create scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
     useEffect(() => {
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild(renderer.domElement);
+
         const handleResize = () => {
             const width = window.innerWidth;
             const height = window.innerHeight;
@@ -47,13 +55,6 @@ function Game() {
         }
         // eslint-disable-next-line
     }, []);
-
-    // create scene
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild(renderer.domElement);
 
     // create bob
     const bobGeometry = new THREE.BoxGeometry();
@@ -106,10 +107,12 @@ function Game() {
         // bob.rotation.x += 0.01;
         // bob.rotation.y += 0.01;
 
+        // check if wall has passed the wall
         if (wallList.length > 0) {
             if (wallList[0].position.z>(bob.position.z + 0.5)){
                 console.log("Wall Passed");
-                setScore(score+1);
+                gameScore += 1;
+                document.getElementById("idScore").innerHTML = "Score: " + gameScore;
                 //remove the first wall
                 scene.remove(wallList[0]);
                 // remove the first wall from the array and add a new wall
@@ -118,8 +121,9 @@ function Game() {
             }
         }
 
+        // move walls
         for (var i = 0; i < wallList.length; i++) {
-            wallList[i].position.z += 0.01;
+            wallList[i].position.z += 0.015;
         }
 
         renderer.render(scene,camera);
@@ -129,7 +133,7 @@ function Game() {
 
     return (
       <>
-        <p className='overlayText'>Score: {score}</p>
+        <p id='idScore' className='overlayText'>Score: {gameScore}</p>
       </>
     );
   }
