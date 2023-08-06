@@ -1,7 +1,6 @@
 .overlayText{
     position: absolute;
     top: 10px;
-    left: calc(50% - width/2);
     font-size: 50px;
     color: white;
     font-weight: bold;
